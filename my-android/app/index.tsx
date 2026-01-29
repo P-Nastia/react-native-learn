@@ -11,7 +11,7 @@ export default function Index() {
 
             <LinearGradient
                 colors={["rgba(16,185,129,0.35)", "transparent"]}
-                className={"absolute w-full h-[380px] rounded-full blur-[120px]"}
+                className="absolute w-full h-[380px] rounded-full blur-[120px]"
             />
 
             <SafeAreaView className="flex-1 px-8 justify-between py-16">
@@ -82,3 +82,4 @@ export default function Index() {
         </View>
     );
 }
+ 

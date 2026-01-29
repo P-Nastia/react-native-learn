@@ -1,12 +1,14 @@
-import { Stack } from "expo-router";
+import {Slot} from "expo-router";
 import "../../global.css";
-import {useSystemBars} from "@/hooks/useSystemBars";
+import {View} from "react-native";
+import AuthTabs from "@/components/auth/authTabs";
 
 export default function AuthLayout() {
-    useSystemBars();
 
     return (
-        <Stack>
-        </Stack>
+        <View className="flex-1 mb-1-">
+            <Slot/>
+            <AuthTabs/>
+        </View>
     );
 }
