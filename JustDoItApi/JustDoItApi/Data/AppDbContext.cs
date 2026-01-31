@@ -1,4 +1,5 @@
 ﻿using JustDoItApi.Entities;
+using JustDoItApi.Entities.Chat;
 using JustDoItApi.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -22,6 +23,11 @@ public class AppDbContext : IdentityDbContext<
     }
 
     public DbSet<ZadachaEntity> Zadachi { get; set; }
+    public DbSet<ChatEntity> Chats { get; set; }
+    public DbSet<ChatTypeEntity> ChatTypes { get; set; }
+    public DbSet<ChatMessageEntity> ChatMessages { get; set; }
+    public DbSet<ChatUserEntity> ChatUsers { get; set; }
+    public DbSet<ChatMessageReadEntity> ChatMessageReads { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -36,6 +42,38 @@ public class AppDbContext : IdentityDbContext<
             ur.HasOne(ur => ur.User)
                 .WithMany(r => r.UserRoles)
                 .HasForeignKey(u => u.UserId)
+                .IsRequired();
+        });
+
+        // Користувачі в чатах
+        builder.Entity<ChatUserEntity>(cu =>
+        {
+            cu.HasKey(x => new { x.ChatId, x.UserId });
+
+            cu.HasOne(x => x.Chat)
+                .WithMany(x => x.ChatUsers)
+                .HasForeignKey(x => x.ChatId)
+                .IsRequired();
+
+            cu.HasOne(x => x.User)
+                .WithMany(x => x.ChatUsers)
+                .HasForeignKey(x => x.UserId)
+                .IsRequired();
+        });
+
+        // Прочитані повідомлення
+        builder.Entity<ChatMessageReadEntity>(mr =>
+        {
+            mr.HasKey(x => new { x.MessageId, x.UserId });
+
+            mr.HasOne(x => x.Message)
+                .WithMany(x => x.Reads)
+                .HasForeignKey(x => x.MessageId)
+                .IsRequired();
+
+            mr.HasOne(x => x.User)
+                .WithMany(x => x.MessageReads)
+                .HasForeignKey(x => x.UserId)
                 .IsRequired();
         });
     }
